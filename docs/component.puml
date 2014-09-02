@@ -1,0 +1,26 @@
+@startuml
+
+package "Server" {
+    [Request]
+    [Response]
+}
+
+package "GAPI Core" {
+    [Config]
+    iRest - [REST]
+    iAuth - [AUTH]
+    iSparql - [SPARQL client]
+
+    [REST] --> iAuth
+    [AUTH] --> iSparql
+}
+
+database "External database" {
+    [SPARQL server]
+}
+
+[Request] --> iRest
+iRest --> [Response]
+[SPARQL client] --> [SPARQL server]
+
+@enduml

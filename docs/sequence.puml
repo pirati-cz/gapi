@@ -1,0 +1,13 @@
+@startuml
+
+Client -> "Server REST": Send request
+
+"Server REST" --> "Server AUTH": Authentication request
+"Server REST" <-- "Server AUTH": Authentication response
+
+"Server REST" --> "Server SPARQL": SPARQL request
+"Server REST" <-- "Server SPARQL": SPARQL response
+
+Client <- "Server REST": Send response
+
+@enduml
