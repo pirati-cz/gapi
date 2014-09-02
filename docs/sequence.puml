@@ -2,12 +2,22 @@
 
 Client -> "Server REST": Send request
 
+activate "Server REST"
 "Server REST" --> "Server AUTH": Authentication request
+activate "Server REST" #DarkSalmon
+activate "Server AUTH" #DarkSalmon
 "Server REST" <-- "Server AUTH": Authentication response
+deactivate "Server AUTH"
 
 "Server REST" --> "Server SPARQL": SPARQL request
+activate "Server SPARQL" #skyblue
+activate "Server REST" #skyblue
 "Server REST" <-- "Server SPARQL": SPARQL response
+deactivate "Server SPARQL"
 
 Client <- "Server REST": Send response
+deactivate "Server REST"
+deactivate "Server REST"
+deactivate "Server REST"
 
 @enduml
