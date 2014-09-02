@@ -25,7 +25,7 @@ Running
 
 
 
-Documentation
+ Documentation
 =============
 
-Internal documentation is ![here](docs/internal.md).
+Internal documentation is [here](docs/internal.md).
