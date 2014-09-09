@@ -1,4 +1,4 @@
-G API
+GAPI
 ====
 
 Graph API Docker container with installer.
