@@ -18,18 +18,16 @@ function err {
 
 splash
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )" #"
-DIR="$DIR/core"
+PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )" #"
+DIR="$PATH/core"
 
 # check arguments
 if [ ! -z "$1" ]; then
     DIR="$1"
 fi
-
 # absolute path test
 if [[ $DIR != /* ]] ; then
-    err "Path of install directory must be absolute."
-    exit 1;
+    DIR="$PATH/$DIR"
 fi
 
 # create target directory and cd there
@@ -54,21 +52,41 @@ mkdir -p $DIR/app
 mkdir -p $DIR/data/db
 mkdir -p $DIR/ssh
 
-# clone repositories
-msg "Cloning other repositories..."
-cd $DIR/app
-#git clone https://github.com/pirati-cz/graph-common.git graph-common
-#git clone https://github.com/pirati-cz/graph-cli.git graph-cli
-#git clone https://github.com/pirati-cz/graph-rest.git graph-rest
-cd $DIR
-
 # generate ssh key
 msg "Generate ssh keys into virtual machine..."
-#./generate_ssh_key.sh
+./core/generate_ssh_key.sh
 
 # container environment for 'app' user
 msg "Installing Docker environment..."
-#echo 'source /etc/container_environment.sh' > $DIR/app/.bashrc
+echo 'source /etc/container_environment.sh' > $DIR/app/.bashrc
 
+# build Docker gapi image?
+msg "Do you want build gapi Docker image? (y/n)"
+read BUILD_IMAGE
+if [[ $BUILD_IMAGE == "y" ]] ; then
+./core/build_image.sh
+fi
+
+# system user
+msg "In GAPI we use user app (uid: 9999) and group app (gid: 9999)."
+msg "Do you want create group app with gid 9999? (y/n)"
+read GROUP
+if [[ $GROUP == "y" ]]; then
+groupadd -g 9999 app
+fi
+msg "Do you want create user app with uid 9999? (y/n)"
+read USER
+if [[ $USER == "y" ]]; then
+useradd -u 9999 app
+fi
+msg "Do you want add your user $(whoami) into app gorup? (y/n)"
+read ADDG
+if [[ $ADDG == "y" ]]; then
+usermod -G app -a $(whoami)
+fi
+
+msg "You can now run gapi Docker container via 'gapi.sh' bash script. Run ./gapi.sh for usage."
+msg "You can connect with container with ssh via 'ssh.sh' bash script."
 msg "Have a nice graphing!"
 exit 0
+

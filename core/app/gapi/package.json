@@ -1,0 +1,39 @@
+{
+  "name": "gapi",
+  "version": "0.0.5",
+  "description": "Open Graph API core",
+  "keywords": [
+    "pirate",
+    "party",
+    "graph",
+    "api"
+  ],
+  "author": {
+    "name": "Pirate Party Czech Republic",
+    "email": "dev@pirati.cz"
+  },
+  "license": "LGPL-3.0+",
+  "main": "./index",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pirati-cz/gapi.git"
+  },
+  "scripts": {
+    "test": "gulp scripts tests && mocha -R spec ./test/lib",
+    "prepublish": "gulp scripts tests && docco ./src/*coffee"
+  },
+  "dependencies": {
+    "mongoose": "~3.8.8",
+    "mongoose-unique-validator": "~0.3.0",
+    "winston": "~0.7.3"
+  },
+  "devDependencies": {
+    "async": "~0.2.9",
+    "mocha": "~1.16.2",
+    "should": "~2.1.1",
+    "coffee-script": "~1.6.3",
+    "gulp": "~3.6.2",
+    "gulp-coffee": "~1.4.3",
+    "docco": "~0.6.3"
+  }
+}
