@@ -18,6 +18,9 @@
     "type": "git",
     "url": "https://github.com/pirati-cz/gapi.git"
   },
+  "bin": {
+    "gapi": "./bin/gapi.js"
+  },
   "scripts": {
     "test": "gulp scripts tests && mocha -R spec ./test/lib",
     "prepublish": "gulp scripts tests && docco ./src/*coffee"
@@ -25,7 +28,9 @@
   "dependencies": {
     "mongoose": "~3.8.8",
     "mongoose-unique-validator": "~0.3.0",
-    "winston": "~0.7.3"
+    "winston": "~0.7.3",
+    "yargs": "~1.2.1",
+    "restify": "~2.8.0"
   },
   "devDependencies": {
     "async": "~0.2.9",

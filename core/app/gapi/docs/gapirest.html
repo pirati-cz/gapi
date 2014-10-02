@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>gapirest.litcoffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="gapiauth.html">
+                gapiauth.litcoffee
+              </a>
+            
+              
+              <a class="source" href="gapidb.html">
+                gapidb.litcoffee
+              </a>
+            
+              
+              <a class="source" href="gapirest.html">
+                gapirest.litcoffee
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>gapirest.litcoffee</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <p>GapiRest - GAPI class for REST.</p>
+<p>Query = require(‘graph-common/lib/query’)
+Graph = require(‘graph-common’).Graph</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>restify = <span class="hljs-built_in">require</span>(<span class="hljs-string">'restify'</span>)
+self = <span class="hljs-literal">null</span>
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">GapiRest</span></span>
+
+    <span class="hljs-attribute">constructor</span>: <span class="hljs-function"><span class="hljs-params">(options)</span> -&gt;</span>
+        self = @
+        <span class="hljs-property">@options</span> = options <span class="hljs-keyword">or</span> {}
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> <span class="hljs-property">@options</span>.formatters
+            <span class="hljs-property">@options</span>.formatters = {}
+            <span class="hljs-property">@options</span>.formatters[<span class="hljs-string">'application/json; q=0.9'</span>] = <span class="hljs-property">@formatJSON</span>
+            <span class="hljs-property">@options</span>.listenPort ?= <span class="hljs-number">8008</span>
+            <span class="hljs-keyword">if</span> <span class="hljs-property">@options</span>.ssl
+                <span class="hljs-keyword">if</span> <span class="hljs-property">@options</span>.sslKeyFile <span class="hljs-keyword">and</span> <span class="hljs-property">@options</span>.sslCertificateFile
+                    fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">'fs'</span>)
+                    <span class="hljs-property">@options</span>.certificate = fs.readFileSync(<span class="hljs-property">@options</span>.sslCertificateFile)
+                    <span class="hljs-property">@options</span>.key = fs.readFileSync(<span class="hljs-property">@options</span>.sslKeyFile)
+                <span class="hljs-keyword">else</span>
+                    <span class="hljs-built_in">console</span>.warn(<span class="hljs-string">'SSL option requires you to specify sslKey and sslCert. Starting without SSL.'</span>)
+        <span class="hljs-property">@server</span> = restify.createServer(<span class="hljs-property">@options</span>)
+        <span class="hljs-property">@server</span>.listen(<span class="hljs-property">@options</span>.listenPort, <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span>
+            <span class="hljs-built_in">console</span>.debug(<span class="hljs-string">'%s listening at %s'</span>, <span class="hljs-property">@server</span>.name, <span class="hljs-property">@server</span>.url)
+        )
+
+    <span class="hljs-property">@run</span>: <span class="hljs-function"><span class="hljs-params">(argv, exit)</span> -&gt;</span>
+        grest = <span class="hljs-keyword">new</span> GapiRest()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <pre><code>   rest.start_graph(argv, exit, <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span>
+      rest.server.pre(restify.pre.sanitizePath())
+      rest.server.use(restify.bodyParser())
+      rest.server.get(<span class="hljs-string">'/.*/'</span>, rest.query)
+      rest.server.post(<span class="hljs-string">'/.*/'</span>, rest.query)
+      rest.server.put(<span class="hljs-string">'/.*/'</span>, rest.query)
+      rest.server.del(<span class="hljs-string">'/.*/'</span>, rest.query)
+      rest.server.listen(rest.options.listenPort, <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span>
+          <span class="hljs-built_in">console</span>.log rest.server.toString()
+      )
+  )
+</code></pre><h1 id="-">#</h1>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">start_graph</span>: <span class="hljs-function"><span class="hljs-params">(argv, exit, done)</span> -&gt;</span>
+    <span class="hljs-property">@graph</span> = <span class="hljs-keyword">new</span> Graph(REST.configuration_manager(argv), done)
+
+  <span class="hljs-property">@configuration_manager</span>: <span class="hljs-function"><span class="hljs-params">(argv)</span> -&gt;</span>
+    mongo_host = argv.host || process.env.DB_PORT_27017_TCP_ADDR || <span class="hljs-string">'localhost'</span>
+    mongo_port = argv.port || process.env.DB_PORT_27017_TCP_PORT || <span class="hljs-string">'27017'</span>
+    mongo_database = argv.database || <span class="hljs-string">'graph'</span>
+    mongo_uri = <span class="hljs-string">"mongodb://<span class="hljs-subst">#{mongo_host}</span>:<span class="hljs-subst">#{mongo_port}</span>/<span class="hljs-subst">#{mongo_database}</span>"</span>
+
+    ConfigurationManager = <span class="hljs-built_in">require</span>(<span class="hljs-string">'graph-common'</span>).ConfigurationManager
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> ConfigurationManager({
+      <span class="hljs-attribute">name</span>: <span class="hljs-string">"Piráti Open Graph API"</span>,
+      <span class="hljs-attribute">StorageManager</span>: mongo_uri,
+      <span class="hljs-attribute">logLevel</span>: <span class="hljs-string">'silly'</span>,
+      <span class="hljs-attribute">logFile</span>: <span class="hljs-string">'logs/graph.log'</span>
+    })
+
+  <span class="hljs-attribute">query</span>: <span class="hljs-function"><span class="hljs-params">(req, res, next)</span> -&gt;</span>
+    <span class="hljs-keyword">switch</span> req.method
+      <span class="hljs-keyword">when</span> <span class="hljs-string">"POST"</span> <span class="hljs-keyword">then</span> action = <span class="hljs-string">'create'</span>
+      <span class="hljs-keyword">when</span> <span class="hljs-string">"DELETE"</span> <span class="hljs-keyword">then</span> action = <span class="hljs-string">'delete'</span>
+      <span class="hljs-keyword">when</span> <span class="hljs-string">"PUT"</span> <span class="hljs-keyword">then</span> action = <span class="hljs-string">'update'</span>
+      <span class="hljs-keyword">else</span> action = <span class="hljs-string">'read'</span>
+
+    self.graph.query(<span class="hljs-keyword">new</span> Query(req.url, action, req.body), <span class="hljs-function"><span class="hljs-params">(query)</span> -&gt;</span>
+      self.passData(res, <span class="hljs-string">'text/plain'</span>, query.data)
+      next()
+    )
+
+  <span class="hljs-attribute">formatJSON</span>: <span class="hljs-function"><span class="hljs-params">(req, res, body)</span> -&gt;</span>
+    <span class="hljs-keyword">if</span> body <span class="hljs-keyword">instanceof</span> Error
+      res.statusCode = body.statusCode || <span class="hljs-number">500</span>
+      <span class="hljs-keyword">if</span> body.body
+        body = body.body
+      <span class="hljs-keyword">else</span>
+        body = <span class="hljs-attribute">message</span>: body.message
+    <span class="hljs-keyword">else</span>
+      <span class="hljs-keyword">if</span> (Buffer.isBuffer(body))
+        body = body.toString(<span class="hljs-string">'base64'</span>)
+    data = JSON.stringify(body, <span class="hljs-literal">null</span>, <span class="hljs-string">'  '</span>)
+    res.setHeader(<span class="hljs-string">'Content-Length'</span>, Buffer.byteLength(data))
+    data
+
+  <span class="hljs-attribute">sendJson</span>: <span class="hljs-function"><span class="hljs-params">(res, json)</span> -&gt;</span>
+    res.charSet(<span class="hljs-string">'utf-8'</span>)
+    res.json(json)
+
+  <span class="hljs-attribute">passData</span>: <span class="hljs-function"><span class="hljs-params">(res, type, data)</span> -&gt;</span>
+    data = <span class="hljs-string">''</span> <span class="hljs-keyword">unless</span> data
+    data = data.toString() <span class="hljs-keyword">unless</span> <span class="hljs-keyword">typeof</span> data <span class="hljs-keyword">is</span> <span class="hljs-string">'string'</span>
+    res.writeHead(<span class="hljs-number">200</span>,
+      <span class="hljs-string">'Content-Length'</span>: data.length,
+      <span class="hljs-string">'Content-Type'</span>: type
+    )
+    res.write(data)
+    res.end()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <h1 id="-">#</h1>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-built_in">module</span>.exports = GapiRest</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

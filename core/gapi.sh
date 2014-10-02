@@ -24,7 +24,13 @@ function start_gapi {
 
 case "$1" in
     start)
-        if [ -z "$GAPI_ID" ]; then start_gapi; else docker start $GAPI_ID; fi
+        if [ -z "$GAPI_ID" ]; then 
+            start_gapi; 
+        else 
+            docker start $GAPI_ID; 
+            IP="$( docker inspect $(docker ps | grep "piraticz/gapi:latest" | awk '{ print $1 }') | grep IPAddress | sed -r "s/[\" a-zA-Z:,]//g" )"
+            echo "IP: $IP"
+        fi
         ;;
     stop)
         if [ -z "$GAPI_ID" ]; then echo "GAPI container no exists, run $0 start"; else docker stop $GAPI_ID; fi
@@ -34,6 +40,8 @@ case "$1" in
         ;;
     status)
         docker ps -a | grep 'CONTAINER\|piraticz/gapi'
+        IP="$( docker inspect $(docker ps | grep "piraticz/gapi:latest" | awk '{ print $1 }') | grep IPAddress | sed -r "s/[\" a-zA-Z:,]//g" )"
+        echo "IP: $IP"
         ;;
     *)
         echo -e "\nUsage: $0 {start|stop|restart|status}\n"
