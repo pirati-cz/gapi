@@ -1,4 +1,6 @@
 core/app/.ssh
 core/app/.bash_history
+core/app/gapi/node_modules
+core/app/gapi/lib
 core/data
 core/ssh

@@ -68,18 +68,18 @@ if [[ $BUILD_IMAGE == "y" ]] ; then
 fi
 
 # system user
-msg "In GAPI we use user app (uid: 9999) and group app (gid: 9999)."
-msg "Do you want create group app with gid 9999? (y/n)"
+msg "In GAPI we use user 'app' (uid: 9999) and group 'app' (gid: 9999)."
+msg "Do you want create group 'app' with gid 9999? (y/n)"
 read GROUP
 if [[ $GROUP == "y" ]]; then
 groupadd -g 9999 app
 fi
-msg "Do you want create user app with uid 9999? (y/n)"
+msg "Do you want create user 'app' with uid 9999? (y/n)"
 read USER
 if [[ $USER == "y" ]]; then
 useradd -u 9999 app
 fi
-msg "Do you want add your user $(whoami) into app gorup? (y/n)"
+msg "Do you want add your user $(whoami) into 'app' gorup? (y/n)"
 read ADDG
 if [[ $ADDG == "y" ]]; then
 usermod -G app -a $(whoami)
