@@ -47,15 +47,15 @@ if ! git clone https://github.com/pirati-cz/gapi.git $IDIR ; then
 fi
 
 # create other directories
-msg "Create useful direcories..."
-mkdir -p $IDIR/app
+msg "Create data directory..."
 mkdir -p $IDIR/data/db
 
 # build Docker gapi image?
 msg "Do you want build gapi Docker image? (y/n)"
 read BUILD_IMAGE
 if [[ $BUILD_IMAGE == "y" ]] ; then
-./core/build_image.sh
+cd $IDIR/core
+./build_image.sh
 fi
 
 # system user
