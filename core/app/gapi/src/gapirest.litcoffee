@@ -2,6 +2,7 @@
 GapiRest - GAPI class for REST.
 
     restify = require('restify')
+    rdfstore = require('rdfstore')
     self = null
 
     class GapiRest
@@ -28,8 +29,8 @@ GapiRest - GAPI class for REST.
 
         @run: (argv, exit) ->
             gapirest = new GapiRest()
-            gapirest.initLocalApps()
-            gapirest.initApps()
+            #gapirest.initLocalApps()
+            #gapirest.initApps()
 
         formatJSON: (req, res, body) ->
             if body instanceof Error

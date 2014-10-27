@@ -2,22 +2,12 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )" #"
 
-MONGO_ID=$(docker ps -a | grep dockerfile/mongodb | awk '{print $1}')
 GAPI_ID=$(docker ps -a | grep piraticz/gapi | awk '{print $1}')
 
-function start_mongo {
-    echo "Running MongoDB container ..."
-    MONGO_CMD="docker run -t -v $DIR/data:/data --name=mongodb -d dockerfile/mongodb mongod --smallfiles"
-    echo $MONGO_CMD
-    MONGO_ID=$($MONGO_CMD)
-}
-
 function start_gapi {
-    if [ -z "$MONGO_ID" ]; then
-        start_mongo
-    fi
     echo "Running GAPI container ..."
-    GAPI_CMD="docker run -t -p 80 -v $DIR/app:/home/app --link=mongodb:db --name gapi -d piraticz/gapi"
+    #GAPI_CMD="docker run -t -p 80 -v $DIR/app:/home/app --link=mongodb:db --name gapi -d piraticz/gapi"
+    GAPI_CMD="docker run -t -p 80:8008 -v /home/scippio/sources/gapi/gapi/core/app/:/home/app --name gapi -d piraticz/gapi"
     echo $GAPI_CMD
     GAPI_ID=$($GAPI_CMD)
 }
@@ -28,7 +18,7 @@ case "$1" in
             start_gapi; 
         else 
             docker start $GAPI_ID; 
-            IP="$( docker inspect $(docker ps | grep "piraticz/gapi:latest" | awk '{ print $1 }') | grep IPAddress | sed -r "s/[\" a-zA-Z:,]//g" )"
+            IP="$( docker inspect $(docker ps -a | grep "piraticz/gapi:latest" | awk '{ print $1 }') | grep IPAddress | sed -r "s/[\" a-zA-Z:,]//g" )"
             echo "IP: $IP"
         fi
         ;;
@@ -40,7 +30,7 @@ case "$1" in
         ;;
     status)
         docker ps -a | grep 'CONTAINER\|piraticz/gapi'
-        IP="$( docker inspect $(docker ps | grep "piraticz/gapi:latest" | awk '{ print $1 }') | grep IPAddress | sed -r "s/[\" a-zA-Z:,]//g" )"
+        IP="$( docker inspect $(docker ps -a | grep "piraticz/gapi:latest" | awk '{ print $1 }') | grep IPAddress | sed -r "s/[\" a-zA-Z:,]//g" )"
         echo "IP: $IP"
         ;;
     *)

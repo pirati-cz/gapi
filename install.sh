@@ -4,7 +4,7 @@ function splash {
     echo ""
     echo -e "\e[0;32m\e[40m                                                     \e[0m"
     echo -e "\e[0;32m\e[40m      GAPI - Graph Application Programming Interface \e[0m"
-    echo -e "\e[0;32m\e[40m      major version: 1.0a                            \e[0m"
+    echo -e "\e[0;32m\e[40m      version: 1.0a                                  \e[0m"
     echo -e "\e[0;32m\e[40m                                                     \e[0m"
 }
 function msg {
@@ -50,15 +50,6 @@ fi
 msg "Create useful direcories..."
 mkdir -p $DIR/app
 mkdir -p $DIR/data/db
-mkdir -p $DIR/ssh
-
-# generate ssh key
-msg "Generate ssh keys into virtual machine..."
-./core/generate_ssh_key.sh
-
-# container environment for 'app' user
-msg "Installing Docker environment..."
-echo 'source /etc/container_environment.sh' > $DIR/app/.bashrc
 
 # build Docker gapi image?
 msg "Do you want build gapi Docker image? (y/n)"
@@ -86,7 +77,6 @@ usermod -G app -a $(whoami)
 fi
 
 msg "You can now run gapi Docker container via 'gapi.sh' bash script. Run ./gapi.sh for usage."
-msg "You can connect with container with ssh via 'ssh.sh' bash script."
 msg "Have a nice graphing!"
 exit 0
 
