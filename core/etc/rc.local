@@ -12,10 +12,7 @@
 # By default this script does nothing.
 
 cd /home/app
-#for APP in graph-*; do
-#    cd $APP && npm install --unsafe-perm && cd ..
-#done
-cd /home/app/gapi && npm install --unsafe-perm && cd ..
+npm install --unsafe-perm && cd ..
 chown -R app:app /home/app
 
 exit 0

@@ -1,34 +1,25 @@
-# start from phusion nodejs image
-FROM phusion/passenger-nodejs
+FROM base/archlinux
+MAINTAINER Vaclav Malek <vaclav.malek@pirati.cz>
 
-# set correct HOME env
+# set environemnt
 ENV HOME /root
+ENV PYTHON /usr/bin/python2.7
 
-# allow user 'app' to login through ssh
-RUN passwd -u app
+# update system + install packages + clean
+RUN pacman -Syu --noconfirm
+RUN pacman -S gcc make python2 nodejs --noconfirm
+RUN pacman -Sc --noconfirm
+RUN npm install -g gulp gulp-coffee coffee-script mocha should rdfstore sparqljs 
 
-# setup permissions for sourcing env
-RUN chmod 755 /etc/container_environment && chmod 644 /etc/container_environment.sh /etc/container_environment.json
+# user app
+RUN groupadd -g 9999 app
+RUN useradd -m -g app -u 9999 -G app app
 
-# set CMD
-CMD ["/sbin/my_init"]
-
-# build nodejs environment
-RUN /build/utilities.sh
-RUN /build/nodejs.sh
-
-# turn on nginx
-RUN rm -f /etc/service/nginx/down
-
-# add config files
-ADD etc/nginx/sites-enabled/webapp.conf /etc/nginx/sites-enabled/webapp.conf
+#
 ADD etc/rc.local /etc/rc.local
-ADD etc/ssh/sshd_config /etc/ssh/sshd_config
 
-# install global Node.js packages
-RUN npm install -g gulp gulp-coffee coffee-script mocha should
-
-# clean temporary files and cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-#EXPOSE 80
+# start 
+CMD ["/home/app/gapi/bin/gapi.js"]
+#CMD ["/usr/sbin/sshd","-D"]
+#CMD ["/usr/sbin/sshd","-D","-d","-E","/root/sshd.log"]
+#CMD ["/sbin/init"]

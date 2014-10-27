@@ -3,7 +3,7 @@ GAPI
 
 Graph API Docker container with installer.
 
-Prerequisities
+ Prerequisities
 ==============
 
 These have to be installed:
@@ -13,21 +13,19 @@ These have to be installed:
   * *git* - for cloning repositories and development
   * *docker* - container platform
  
-Installation
+I nstallation
 ============
 
 ```
 curl -sSL https://raw.githubusercontent.com/pirati-cz/gapi/master/install.sh | bash -s /dir-to-install-graph
 ```
 
-Running
+Ru nning
 =======
 
 In core directory are four bash scripts:
 
   * *build_image.sh* - build docker piraticz/gapi image
-  * *generate_ssh_key.sh* - generate key pairs and move public key into GAPI docker image
-  * *ssh.sh* - for connecting into GAPI running docker image
   * *gapi.sh* - you can start, stop, restart or check status about GAPI docker image
 
  Documentation
