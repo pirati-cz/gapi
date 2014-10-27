@@ -18,22 +18,22 @@ function err {
 
 splash
 
-PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )" #"
-DIR="$PATH/core"
+IPATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )" #"
+IDIR="$IPATH/core"
 
 # check arguments
 if [ ! -z "$1" ]; then
-    DIR="$1"
+    IDIR="$1"
 fi
 # absolute path test
-if [[ $DIR != /* ]] ; then
-    DIR="$PATH/$DIR"
+if [[ $IDIR != /* ]] ; then
+    IDIR="$IPATH/$IDIR"
 fi
 
 # create target directory and cd there
-msg "Create install directory... $DIR"
-if mkdir -p "$DIR" ; then
-    cd $DIR
+msg "Create install directory... $IDIR"
+if mkdir -p "$IDIR" ; then
+    cd $IDIR
 else
     err "Creating directory failed."
     exit 1;
@@ -41,15 +41,15 @@ fi
 
 # clone base
 msg "Cloning base repository..."
-if ! git clone https://github.com/pirati-cz/gapi.git $DIR ; then
+if ! git clone https://github.com/pirati-cz/gapi.git $IDIR ; then
     err "Cloning failed."
     exit 1;
 fi
 
 # create other directories
 msg "Create useful direcories..."
-mkdir -p $DIR/app
-mkdir -p $DIR/data/db
+mkdir -p $IDIR/app
+mkdir -p $IDIR/data/db
 
 # build Docker gapi image?
 msg "Do you want build gapi Docker image? (y/n)"
