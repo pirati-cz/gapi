@@ -9,11 +9,44 @@ function splash {
 }
 function msg {
     echo -ne "\e[0;37m\e[40m >>> \e[m "
-    echo $1
+    if [[ $1 == "n" ]] ; then
+        echo -ne "$2"
+    else
+        echo -e "$1"
+    fi
 }
 function err {
     echo -ne "\e[0;91m\e[40m >>> \e[m "
     echo $1   
+}
+function ask {
+    while true; do
+        if [ "${2:-}" = "Y" ]; then
+            prompt="Y/n"
+            default=Y
+        elif [ "${2:-}" = "N" ]; then
+            prompt="y/N"
+            default=N
+        else
+            prompt="y/n"
+            default=
+        fi
+
+        # Ask the question
+        msg n "$1 [$prompt] "
+        read REPLY
+
+        # Default?
+        if [ -z "$REPLY" ]; then
+            REPLY=$default
+        fi
+
+        # Check if the reply is valid
+        case "$REPLY" in
+            Y*|y*) return 0 ;;
+            N*|n*) return 1 ;;
+        esac
+    done
 }
 
 splash
@@ -36,20 +69,18 @@ if mkdir -p "$IDIR" ; then
     cd $IDIR
 else
     err "Creating directory failed."
-    exit 1;
+    exit 1
 fi
 
 # clone base
 msg "Cloning base repository..."
 if ! git clone https://github.com/pirati-cz/gapi.git $IDIR ; then
     err "Cloning failed."
-    exit 1;
+    exit 1
 fi
 
 # build Docker gapi image?
-msg "Do you want build gapi Docker image? (y/n)"
-read BUILD_IMAGE
-if [[ $BUILD_IMAGE == "y" ]] ; then
+if ask "Do you want build gapi Docker image?" Y; then
 cd $IDIR/core
 ./build_image.sh
 fi
@@ -57,21 +88,15 @@ fi
 # system user
 msg "In GAPI we use user 'app' (uid: 9999) and group 'app' (gid: 9999)."
 
-msg "Do you want create group 'app' with gid 9999? (y/n)"
-read GROUP
-if [[ $GROUP == "y" ]]; then
+if ask "Do you want create group 'app' with gid 9999?" Y; then
 groupadd -g 9999 app
 fi
 
-msg "Do you want create user 'app' with uid 9999? (y/n)"
-read USER
-if [[ $USER == "y" ]]; then
+if ask "Do you want create user 'app' with uid 9999?" Y; then
 useradd -u 9999 app
 fi
 
-msg "Do you want add your user $(whoami) into 'app' gorup? (y/n)"
-read ADDG
-if [[ $ADDG == "y" ]]; then
+if ask "Do you want add your user $(whoami) into 'app' gorup?" Y; then
 usermod -G app -a $(whoami)
 fi
 

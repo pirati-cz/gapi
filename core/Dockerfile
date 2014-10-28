@@ -20,6 +20,3 @@ ADD etc/rc.local /etc/rc.local
 
 # start 
 CMD ["/home/app/gapi/bin/gapi.js"]
-#CMD ["/usr/sbin/sshd","-D"]
-#CMD ["/usr/sbin/sshd","-D","-d","-E","/root/sshd.log"]
-#CMD ["/sbin/init"]
