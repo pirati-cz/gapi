@@ -6,7 +6,7 @@ GAPI_ID=$(docker ps -a | grep piraticz/gapi | awk '{print $1}')
 
 function start_gapi {
     echo "Running GAPI container ..."
-    GAPI_CMD="docker run -t -p 8008:8008 -v /home/scippio/sources/gapi/gapi/core/app/:/home/app --name gapi -d piraticz/gapi"
+    GAPI_CMD="docker run -t -p 8008:8008 -v $DIR/app:/home/app --name gapi -d piraticz/gapi"
     echo $GAPI_CMD
     GAPI_ID=$($GAPI_CMD)
 }

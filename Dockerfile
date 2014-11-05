@@ -19,4 +19,4 @@ RUN useradd -m -g app -u 9999 -G app app
 ADD etc/rc.local /etc/rc.local
 
 # start 
-CMD ["/home/app/gapi/bin/gapi.js"]
+CMD ["/home/app/gapi.sh","start"]
