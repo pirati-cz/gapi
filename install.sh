@@ -81,7 +81,7 @@ fi
 
 # build Docker gapi image?
 if ask "Do you want build gapi Docker image?" Y; then
-cd $IDIR/core
+cd $IDIR
 ./build_image.sh
 fi
 
@@ -120,8 +120,9 @@ fi
 
 # run
 if ask "Do you run gapi-web component?" Y; then
-echo "./gapi-web/bin/gapi-web.js" >> $IDIR/app/install.sh
+echo "./gapi-web/bin/gapi-web.js" >> $IDIR/app/gapi.sh
 fi
+echo "exit 0" >> $IDIR/app/gapi.sh
 
 msg "You can now run gapi Docker container via 'gapi.sh' bash script. Run ./gapi.sh for usage."
 msg "Have a nice graphing!"
