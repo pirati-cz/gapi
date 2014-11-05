@@ -73,7 +73,7 @@ else
 fi
 
 # clone base
-msg "Cloning base repository..."
+msg "Cloning install base repository..."
 if ! git clone https://github.com/pirati-cz/gapi.git $IDIR ; then
     err "Cloning failed."
     exit 1
@@ -98,6 +98,29 @@ fi
 
 if ask "Do you want add your user $(whoami) into 'app' gorup?" Y; then
 usermod -G app -a $(whoami)
+fi
+
+# components
+msg "Install GAPI components. For information visit GAPI webpage (https://github.com/pirati-cz/gapi)."
+if ask "Do you install gapi-sparql component?" Y; then
+msg "Cloning repository..."
+if ! git clone https://github.com/pirati-cz/gapi-sparql.git $IDIR/app/gapi-sparql ; then
+    err "Cloning failed."
+    exit 1
+fi
+fi
+
+if ask "Do you install gapi-web component?" Y; then
+msg "Cloning repository..."
+if ! git clone https://github.com/pirati-cz/gapi-web.git $IDIR/app/gapi-web ; then
+    err "Cloning failed."
+    exit 1
+fi
+fi
+
+# run
+if ask "Do you run gapi-web component?" Y; then
+echo "./gapi-web/bin/gapi-web.js" >> $IDIR/app/install.sh
 fi
 
 msg "You can now run gapi Docker container via 'gapi.sh' bash script. Run ./gapi.sh for usage."
