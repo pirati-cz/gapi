@@ -14,5 +14,5 @@
 cd /home/app
 npm install --unsafe-perm && cd ..
 chown -R app:app /home/app
-
+chmod +x /home/app/gapi.sh
 exit 0
